@@ -1,8 +1,9 @@
 FROM rabbitmq:management
 MAINTAINER atlas <doroshuk33@yandex.by>
 
-ENV RABBITMQ_ERLANG_COOKIE=test
-ENV CLUSTER_WITH=rabbit1
+ENV RABBITMQ_ERLANG_COOKIE=123fsd123dfbqb
+ENV CLUSTER_WITH=false
+ENV CLUSTER_MASTER=false
 ENV HA=true
 
 WORKDIR "/home/scripts/"

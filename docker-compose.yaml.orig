@@ -15,30 +15,28 @@ services:
           - public
 
     rabbit1:
-        image: test:latest
+        image: rabbitmq:management
         container_name: rabbit1
         hostname: rabbit1
         environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
-            - CLUSTER_MASTER=true
-            - HA=true
+            - RABBITMQ_ERLANG_COOKIE='mysecret'
         networks:
           - public
     rabbit2:
-        image: test:latest
+        image: rabbitmq:management
         container_name: rabbit2
         hostname: rabbit2
         environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
+            - RABBITMQ_ERLANG_COOKIE='mysecret'
             - CLUSTER_WITH=rabbit1
         networks:
           - public
     rabbit3:
-        image: test:latest
+        image: rabbitmq:management
         container_name: rabbit3
         hostname: rabbit3
         environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
+            - RABBITMQ_ERLANG_COOKIE='mysecret'
             - CLUSTER_WITH=rabbit1
         networks:
           - public
