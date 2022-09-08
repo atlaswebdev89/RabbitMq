@@ -22,6 +22,8 @@ services:
             - RABBITMQ_ERLANG_COOKIE=mysecret
             - CLUSTER_MASTER=true
             - HA=true
+        volumes:
+          - rabbit1:/var/lib/rabbitmq
         networks:
           - public
     rabbit2:
@@ -33,6 +35,8 @@ services:
             - CLUSTER_WITH=rabbit1
         networks:
           - public
+        volumes:
+          - rabbit2:/var/lib/rabbitmq
     rabbit3:
         image: test:latest
         container_name: rabbit3
@@ -42,7 +46,15 @@ services:
             - CLUSTER_WITH=rabbit1
         networks:
           - public
-          
+        volumes:
+          - rabbit3:/var/lib/rabbitmq
+
 networks:
   public:
     driver: bridge
+
+volumes:
+  rabbit1:
+  rabbit2:
+  rabbit3:
+  
