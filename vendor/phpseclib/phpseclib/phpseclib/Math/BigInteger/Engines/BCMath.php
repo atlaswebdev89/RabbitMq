@@ -81,7 +81,7 @@ class BCMath extends Engine
         switch (abs($base)) {
             case 256:
                 // round $len to the nearest 4
-                $len = (strlen($this->value) + 3) & 0xFFFFFFFC;
+                $len = (strlen($this->value) + 3) & ~3;
 
                 $x = str_pad($this->value, $len, chr(0), STR_PAD_LEFT);
 
@@ -336,7 +336,7 @@ class BCMath extends Engine
      */
     public function bitwise_or(BCMath $x)
     {
-        return $this->bitwiseXorHelper($x);
+        return $this->bitwiseOrHelper($x);
     }
 
     /**

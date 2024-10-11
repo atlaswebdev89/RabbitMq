@@ -56,8 +56,6 @@ then
         echo "RabbitMq server not running! Failed! Stoping script";
         exit;
     fi
-    
-    
 
     rabbitmqctl stop_app
     # Добавляем в cluster
@@ -66,13 +64,13 @@ then
     # Запускаем
     rabbitmqctl start_app
     
-     # Включаем репликацию очередей между всеми нодами
+    # Включаем репликацию очередей между всеми нодами
     if [[ ${HA} == true ]]
     then
         rabbitmqctl set_policy ha-all "" '{"ha-mode":"all","ha-sync-mode":"automatic"}';
     fi
     # Tail to keep the a foreground process active..
-    tail -f /var/log/rabbitmq/*
+    tail -f /var/log/bootstrap.log
 else
     echo "Running as single server"
     /opt/rabbitmq/sbin/rabbitmq-server

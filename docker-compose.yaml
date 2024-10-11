@@ -1,60 +1,65 @@
-version: '3.1'
-
-services:
-    
-    loadbalance:
-        image: nginx
-        container_name: nginx_loadbalance
-        hostname: nginxhost
-        ports:
-            - "5672:5672"
-            - "15672:15672"
-        volumes:
-          - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
-        networks:
-          - public
-
-    rabbit1:
-        image: test:latest
-        container_name: rabbit1
-        hostname: rabbit1
-        environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
-            - CLUSTER_MASTER=true
-            - HA=true
-        volumes:
-          - rabbit1:/var/lib/rabbitmq
-        networks:
-          - public
-    rabbit2:
-        image: test:latest
-        container_name: rabbit2
-        hostname: rabbit2
-        environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
-            - CLUSTER_WITH=rabbit1
-        networks:
-          - public
-        volumes:
-          - rabbit2:/var/lib/rabbitmq
-    rabbit3:
-        image: test:latest
-        container_name: rabbit3
-        hostname: rabbit3
-        environment:
-            - RABBITMQ_ERLANG_COOKIE=mysecret
-            - CLUSTER_WITH=rabbit1
-        networks:
-          - public
-        volumes:
-          - rabbit3:/var/lib/rabbitmq
+name: ${NAME_PROJECT:-rabbitmq}
 
 networks:
-  public:
+  rabbitmq:
     driver: bridge
 
 volumes:
   rabbit1:
   rabbit2:
   rabbit3:
+
+services:
+    loadbalance:
+        image: nginx
+        container_name: nginx_loadbalance
+        hostname: nginxhost
+        ports:
+            - '${RABBIT_PORT:-5672}:5672'
+            - '${RABBIT_MANAGER_PORT:-15672}:15672'
+        volumes:
+          - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
+        networks:
+          - rabbitmq
+    rabbit1:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        container_name: rabbit1
+        hostname: rabbit1
+        environment:
+            - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+            - CLUSTER_MASTER=true
+            - HA=true
+        volumes:
+          - rabbit1:/var/lib/rabbitmq
+        networks:
+          - rabbitmq
+    rabbit2:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        container_name: rabbit2
+        hostname: rabbit2
+        environment:
+          - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+          - CLUSTER_WITH=rabbit1
+        networks:
+          - rabbitmq
+        volumes:
+          - rabbit2:/var/lib/rabbitmq
+    rabbit3:
+        build:
+          context: .
+          dockerfile: Dockerfile
+        container_name: rabbit3
+        hostname: rabbit3
+        environment:
+          - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+          - CLUSTER_WITH=rabbit1
+        networks:
+          - rabbitmq
+        volumes:
+          - rabbit3:/var/lib/rabbitmq
+
   
