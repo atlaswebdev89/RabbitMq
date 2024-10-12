@@ -1,1 +1,1 @@
-Файлы php для publisher и consumer не работают
+Docker сборка для RabbitMq cluster
