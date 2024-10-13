@@ -1,5 +1,0 @@
-{
-    "require": {
-        "videlalvaro/php-amqplib": "^3.2"
-    }
-}

@@ -17,8 +17,8 @@ services:
         hostname: nginxhost
         restart: always
         ports:
-            - '${RABBIT_PORT:-5672}:5672'
-            - '${RABBIT_MANAGER_PORT:-15672}:15672'
+            - '${NGINX_RABBIT_PORT:-5672}:5672'
+            - '${NGINX_RABBIT_MANAGER_PORT:-15672}:15672'
         volumes:
           - ./nginx-config/nginx.conf:/etc/nginx/nginx.conf
         networks:
@@ -32,8 +32,8 @@ services:
       hostname: haproxy
       restart: always
       ports:
-        - '${RABBIT_PORT:-5673}:5672'
-        - '${RABBIT_MANAGER_PORT:-15673}:15672'
+        - '${HAPROXY_RABBIT_PORT:-5673}:5672'
+        - '${HAPROXY_RABBIT_MANAGER_PORT:-15673}:15672'
       volumes:
         - ./HAProxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
       networks:
